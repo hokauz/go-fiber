@@ -1,0 +1,7 @@
+# Strict mode: no cache volumes, ephemeral container
+services:
+  test-runner:
+    volumes:
+      - .:/source:ro
+    # Override: no go-mod-cache, no go-build-cache
+

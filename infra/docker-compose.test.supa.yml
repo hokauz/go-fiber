@@ -1,0 +1,31 @@
+services:
+  test-runner-supa:
+    image: ${E2E_SUPA_IMAGE:-go-fiber-supa-test-runner}
+    working_dir: /workspace
+    network_mode: host
+    environment:
+      SOURCE_DIR: /source
+      WORKSPACE_DIR: /workspace/api
+      REPORT_ROOT: /report
+      WORKTREE_ID: ${WORKTREE_ID:-local}
+      RUN_ID: ${RUN_ID:-manual}
+      RUN_MODE: ${RUN_MODE:-fast}
+      SUPABASE_REUSE: ${SUPABASE_REUSE:-1}
+      RUNNER_NETWORK_MODE: host
+      E2E_TEST_EMAIL: ${E2E_TEST_EMAIL:-e2e-user@local.test}
+      E2E_TEST_PASSWORD: ${E2E_TEST_PASSWORD:-Passw0rd!234}
+      E2E_VERBOSE: ${E2E_VERBOSE:-0}
+    volumes:
+      - ./:/source:ro
+      - ./e2e-report-supa:/report
+      - /var/run/docker.sock:/var/run/docker.sock
+      - go-supa-mod-cache:/go/pkg/mod
+      - go-supa-build-cache:/root/.cache/go-build
+    command: ["/workspace/scripts/e2e-supa-run.sh"]
+
+volumes:
+  go-supa-mod-cache:
+    name: go-fiber-supa-mod-${WORKTREE_ID:-local}
+  go-supa-build-cache:
+    name: go-fiber-supa-build-${WORKTREE_ID:-local}
+

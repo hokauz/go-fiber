@@ -1,0 +1,51 @@
+# Binaries
+go-fiber
+/main
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Build output
+/dist
+/build
+tmp/
+*.test
+*.out
+
+# Go workspace
+go.work
+go.work.sum
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+**/.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.dev
+.env.prod
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+e2e-report*/
+
+# Coverage
+coverage.html
+coverage.out
+*.coverprofile
+
+# Generated docs intermediates
+docs/swagger.json
+/api

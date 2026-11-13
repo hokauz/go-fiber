@@ -1,0 +1,29 @@
+ARG E2E_BASE_IMAGE=go-fiber-test-base
+FROM ${E2E_BASE_IMAGE}
+
+ARG SUPABASE_VERSION=2.75.0
+
+LABEL org.opencontainers.image.title="go-fiber e2e supabase runner"
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    docker.io \
+    jq \
+    postgresql-client \
+    xz-utils \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN set -eux; \
+  case "$(dpkg --print-architecture)" in \
+    amd64) SUPABASE_ARCH="amd64" ;; \
+    arm64) SUPABASE_ARCH="arm64" ;; \
+    *) echo "unsupported architecture: $(dpkg --print-architecture)" >&2; exit 1 ;; \
+  esac; \
+  curl -fsSL "https://github.com/supabase/cli/releases/download/v${SUPABASE_VERSION}/supabase_linux_${SUPABASE_ARCH}.tar.gz" -o /tmp/supabase.tgz; \
+  tar -xzf /tmp/supabase.tgz -C /tmp; \
+  mv /tmp/supabase /usr/local/bin/supabase; \
+  chmod +x /usr/local/bin/supabase; \
+  rm -f /tmp/supabase.tgz
+
+WORKDIR /workspace
+COPY scripts /workspace/scripts
+RUN chmod +x /workspace/scripts/*.sh

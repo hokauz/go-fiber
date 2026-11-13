@@ -1,0 +1,12 @@
+FROM golang:1.26-bookworm
+
+LABEL org.opencontainers.image.title="go-fiber test base"
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    python3 \
+    rsync \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /workspace
